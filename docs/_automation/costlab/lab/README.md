@@ -20,7 +20,7 @@ Learn how to optimize costs in cloud environments using Azure tools and best pra
 
 ---
 
-<img src="./pizzalogo.jpg" alt="Donatello's Pizza Logo" style="width: 100%; max-width: 1024px; height: auto;">
+<img src="/docs/_automation/costlab/lab/pizzalogo.jpg" alt="Donatello's Pizza Logo" style="width: 100%; max-width: 1024px; height: auto;">
 
 # Cost Optimization Lab
 
@@ -42,6 +42,7 @@ By the end of this workshop, you'll be equipped to efficiently manage your Azure
 
 - [Table of Contents](#table-of-contents)
 - [1. Welcome and Introduction](#1-welcome-and-introduction)
+- [2. Analyzing Monthly Costs of Existing Applications](#2-analyzing-monthly-costs-of-existing-applications)
 - [3. Identifying Idle Resources](#3-identifying-idle-resources)
 - [4. Automating](#4-automating)
 - [5. Enabling Azure Hybrid Benefit for Windows VMs](#5-enabling-azure-hybrid-benefit-for-windows-vms)
@@ -62,7 +63,7 @@ By the end of this workshop, you'll be equipped to efficiently manage your Azure
 
 
 
-2. Analyzing Monthly Costs of Existing Applications
+##  2. Analyzing Monthly Costs of Existing Applications
 
 Azure tags provide a powerful way to organize and manage resources. By tagging resources with relevant information, such as the environment, application name, owner, and project, we can filter cost management data to analyze the expenses related to specific parts of our infrastructure. This exercise aims to demonstrate how to use these tags to calculate and analyze the monthly cost of a specified application.
 
@@ -93,8 +94,6 @@ Azure Advisor offers a Cost Optimization workbook specifically designed to ident
 [ ] Concluded
 
 ## 4. Automating 
-
-!!! To be added Waste reduction introduction !!!! 
 
 Imagine the bustling kitchen of Donatello's, where every ingredient and tool serves a purpose in crafting the perfect pizza. Just like in a busy kitchen, efficiency in Donatello's cloud environment is crucial for maintaining operational excellence. Without automated oversight, resources such as idle virtual machines and unused storage could accumulate unnoticed, draining valuable resources and impacting operational budgets.
 
