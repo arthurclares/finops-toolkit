@@ -20,7 +20,7 @@ Learn how to optimize costs in cloud environments using Azure tools and best pra
 
 ---
 
-<img src="/docs/_automation/costlab/lab/pizzalogo.jpg" alt="Donatello's Pizza Logo" style="width: 100%; max-width: 1024px; height: auto;">
+<img src="https://raw.githubusercontent.com/arthurclares/finops-toolkit/arclares-costoptlabs/docs/_automation/costlab/lab/pizzalogo.jpg" alt="Donatello's Pizza Logo" style="width: 100%; max-width: 1024px; height: auto;">
 
 # Cost Optimization Lab
 
