@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Cost Optimization Lab
-description: 'Learn how to optimize costs in cloud environments using Azure tools and best practices.'
+title: Lab deployment instructions
+description: 'Deploy the cost optimization lab.'
 parent: Cost Optimization Lab
 nav_order: 2
 permalink: /lab/labinstructions
@@ -77,34 +77,29 @@ Replace <your-subscription-id> with the ID of the subscription you want to use.
 Clone the lab repository from GitHub to your local machine. 
 
 ```powershell
-git clone <repository-url>
+git clone --no-checkout https://github.com/arthurclares/finops-toolkit.git   
 ```
 
 
-Navigate to the directory of the cloned repository:
-
-```powershell
-cd <repository-folder>
-```
-
-
-# Step 2: Navigate to the repository directory
+### Step 2: Navigate to the repository directory
 
 ```powershell
 cd finops-toolkit
 ```
-# Step 3: Enable the sparse-checkout feature
+
+### Step 3: Enable the sparse-checkout feature
 
 ```powershell
 git sparse-checkout init --cone
 ```
 
-# Step 4: Configure the sparse-checkout to include only the desired folder
+### Step 4: Configure the sparse-checkout to include only the desired folder
 
 ```powershell
 git sparse-checkout set docs/_automation/costlab
 ```
-# Step 5: Checkout the specific branch
+
+### Step 5: Checkout the specific branch
 
 ```powershell
 git checkout arclares-costoptlabs
