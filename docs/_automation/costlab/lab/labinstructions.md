@@ -2,6 +2,8 @@
 layout: default
 title: Cost Optimization Lab
 description: 'Learn how to optimize costs in cloud environments using Azure tools and best practices.'
+parent: Cost Optimization Lab
+nav_order: 2
 permalink: /lab/labinstructions
 ---
 
