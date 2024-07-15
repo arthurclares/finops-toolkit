@@ -295,5 +295,20 @@ location: location
 // output
 //==============================================================================
 
-output LargeVMDiskID string = LargeVM.properties.storageProfile.osDisk.managedDisk.id
-output LargeVMDiskName string = LargeVM.properties.storageProfile.osDisk.managedDisk.id
+//==============================================================================
+// Output
+//==============================================================================
+
+// Output the VM sizes
+output windowsVmSize string = vmSize
+output linuxVmSize string = vmSize
+output bigVmSize string = bigvmSize
+
+// Output the App Service Plan ID
+output appServicePlanId string = appServicePlan.id
+
+// Output location
+output deploymentLocation string = location
+
+// Output the resource group name
+output resourceGroupName string = resourceGroup().name

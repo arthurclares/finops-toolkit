@@ -51,7 +51,6 @@ By the end of this workshop, you'll be equipped to efficiently manage your Azure
 - [7. Reviewing and Optimizing Resource SKUs](#7-reviewing-and-optimizing-resource-skus)
 - [8. Backup optimization](#8-backup-optimization)
 - [9. Q\&A and Wrap-Up](#9-qa-and-wrap-up)
-- [7. Log Analytics Cost Analysis](#7-log-analytics-cost-analysis)
 
 
 ## 1. Welcome and Introduction
@@ -109,8 +108,6 @@ Note: To validate that the automation is functioning correctly, manually trigger
 - **Objective**: Deployment of a Logic App to Receive Alerts for New Idle Resources
 - **Practical Exercise**: Create and test the alerting mechanism
 
-
-
 [ ] Concluded
 
 ## 5. Enabling Azure Hybrid Benefit for Windows VMs
@@ -161,11 +158,6 @@ Review Non-Production VMs:
 
 Configure Auto-Shutdown Policy:
     Set up an auto-shutdown policy for these non-production VMs to power them off automatically outside of business hours (e.g., from 7 PM to 7 AM, and during weekends).
-
-
-[ ] Concluded
-
-
 
 [ ] Concluded
 
@@ -228,6 +220,8 @@ Your task is to review and optimize the backup policies for Donatello's VMs. Eva
 [ ] Concluded
 
 
+<!--
+
 // other ideas:
 
 ## 7. Log Analytics Cost Analysis
@@ -243,3 +237,4 @@ Your task is to review and optimize the backup policies for Donatello's VMs. Eva
 [ ] Concluded
 
 
+--->

@@ -41,7 +41,7 @@ resource newRG 'Microsoft.Resources/resourceGroups@2024-03-01' = [for rgName in 
 //==============================================================================
 
 // Deploy the module for each resource group
-module idleResources 'modules/idleresources.bicep' = [for (rgName, i) in rgNames: {
+module idleResources '../modules/idleresources.bicep' = [for (rgName, i) in rgNames: {
   name: 'idleResources-module-${i}'
   scope: resourceGroup(rgName)
   params: {
@@ -53,7 +53,7 @@ module idleResources 'modules/idleresources.bicep' = [for (rgName, i) in rgNames
   ]
 }]
 
-module multiVM 'modules/compute.bicep' = [for (rgName, i) in rgNames: {
+module multiVM '../modules/compute.bicep'= [for (rgName, i) in rgNames: {
   name: 'multiVM-module-${i}'
   scope: resourceGroup(rgName)
   params: {
