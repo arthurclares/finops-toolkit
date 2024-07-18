@@ -161,7 +161,7 @@ Review Non-Production VMs:
     Identify all non-production VMs in Northwind's cloud environment, particularly those used by the DoughDevelopers team for testing and development.
 
 Configure Auto-Shutdown Policy:
-    Set up an auto-shutdown policy for these non-production VMs to power them off automatically outside of business hours (e.g., from 7 PM to 7 AM, and during weekends).
+    Set up an [auto-shutdown logic app](https://learn.microsoft.com/en-us/azure/azure-functions/start-stop-vms/overview) for these non-production VMs to power them off automatically outside of business hours (e.g., from 7 PM to 7 AM, and during weekends).
 
 
 ## 7. Reviewing and Optimizing Resource SKUs
