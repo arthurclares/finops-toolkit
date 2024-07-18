@@ -56,7 +56,7 @@ By the end of this workshop, you'll be equipped to efficiently manage your Azure
 - Importance of Cost Optimization in Cloud Environments
 - Brief Introduction to Azure Cost Management Tools
 
-[ ] Concluded
+
 
 
 
@@ -88,7 +88,7 @@ Azure Advisor offers a Cost Optimization workbook specifically designed to ident
 - **Practical Exercise**: Identify idle resources such as Disks, Application Gateways, Public IP Addresses, and Private Endpoints
 - **Tools**: Azure Advisor Cost Optimization Workbook
 
-[ ] Concluded
+
 
 ## 4. Automating 
 
@@ -106,7 +106,7 @@ Note: To validate that the automation is functioning correctly, manually trigger
 - **Objective**: Deployment of a Logic App to Receive Alerts for New Idle Resources
 - **Practical Exercise**: Create and test the alerting mechanism
 
-[ ] Concluded
+
 
 ## 5. Enabling Azure Hybrid Benefit for Windows VMs
 
@@ -121,8 +121,14 @@ Your task is to apply the Azure Hybrid benefit for Windows VMs. However, keep in
 - **Objective**: Prioritizing and Enabling Hybrid Benefit
 - **Practical Exercise**: Apply Azure Hybrid Benefit to selected VMs
 
-[ ] Concluded
-
+<details>
+  <summary>Click to view a hint about Azure Hybrid Benefit</summary>
+  <div class="code-block">
+    <pre><code> Vou can use the [Azure pricing calculator](https://azure.microsoft.com/en-us/pricing/calculator/) to simulate and prioritize the Hybrid benefit to different VM sizes.
+    Also, the [Azure Hybrid Benefit Calculator](https://azure.microsoft.com/en-gb/pricing/hybrid-benefit/#overview) can be used to know how many cores you are entitled to use on the cloud.
+</code></pre>
+  </div>
+</details>
 
 ## 6. Cleaning Up Idle Resources
 
@@ -157,7 +163,6 @@ Review Non-Production VMs:
 Configure Auto-Shutdown Policy:
     Set up an auto-shutdown policy for these non-production VMs to power them off automatically outside of business hours (e.g., from 7 PM to 7 AM, and during weekends).
 
-[ ] Concluded
 
 ## 7. Reviewing and Optimizing Resource SKUs
 
@@ -206,7 +211,7 @@ Your task is to review and optimize the backup policies for Northwind's VMs. Eva
 - **Objective**: Designing an Efficient Backup Strategy
 - **Practical Exercise**: Implement a backup plan for production and non-production resources
 
-[ ] Concluded
+
 
 
 
@@ -215,7 +220,6 @@ Your task is to review and optimize the backup policies for Northwind's VMs. Eva
 - Summary of Key Takeaways
 - Next Steps and Additional Resources
 
-[ ] Concluded
 
 
 <!--
