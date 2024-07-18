@@ -20,7 +20,7 @@ Description of the prerequisites for the deployment
 
 ## 📗 How to use this template
 
-1. Download the bicep file from [this]() storage account and copy it to Azure Cloud Shell
+1. Download the bicep file from [this](https://arclarescostoptimization.blob.core.windows.net/costlab/costoptlab.zip?sp=r&st=2024-07-17T21:52:11Z&se=2024-08-30T05:52:11Z&spr=https&sv=2022-11-02&sr=b&sig=zVtFpA0GylOKvnePbY%2FoQy3gQV0eT6x8vzqXpSmGJ2Y%3D) storage account and copy it to Azure Cloud Shell
 2. Unzip the file and run the following command to install the bicep template
    1. ```powershell
         New-AzResourceGroupDeployment -TemplateFile main.bicep -ResourceGroupName xxxx -appName NewLogicApp
