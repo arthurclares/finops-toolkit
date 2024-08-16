@@ -18,6 +18,7 @@ Learn how to optimize costs in cloud environments using Azure tools and best pra
 
 ---
 
+
 <img src="https://raw.githubusercontent.com/arthurclares/finops-toolkit/arclares-costoptlabs/docs/_automation/costlab/lab/pizzalogo.jpg" alt="Northwind's Pizza Logo" style="width: 100%; max-width: 1024px; height: auto;">
 
 # Cost Optimization Lab
@@ -33,210 +34,120 @@ In this workshop, we'll guide you through the best practices for cost optimizati
     Implement advanced application optimizations
 
 By the end of this workshop, you'll be equipped to efficiently manage your Azure infrastructure. This will enable Northwind's Pizza to maximize business value from its cloud investments, freeing up resources to develop new services and ensure the seamless launch of new gourmet pizza flavors. This optimization will empower Northwind's Pizza to stay ahead in a competitive market, offering the best products and experiences to its customers.
-# Workshop Agenda
 
+# Workshop Agenda
 
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
 - [1. Welcome and Introduction](#1-welcome-and-introduction)
-- [2. Analyzing Monthly Costs of Existing Applications](#2-analyzing-monthly-costs-of-existing-applications)
-- [3. Identifying Idle Resources](#3-identifying-idle-resources)
-- [4. Automating](#4-automating)
-- [5. Enabling Azure Hybrid Benefit for Windows VMs](#5-enabling-azure-hybrid-benefit-for-windows-vms)
-- [6. Cleaning Up Idle Resources](#6-cleaning-up-idle-resources)
-- [7. Auto shutdown of non-production VMs](#7-auto-shutdown-of-non-production-vms)
-- [7. Reviewing and Optimizing Resource SKUs](#7-reviewing-and-optimizing-resource-skus)
-- [8. Backup optimization](#8-backup-optimization)
-- [9. Q\&A and Wrap-Up](#9-qa-and-wrap-up)
-
+- [2. Data Ingestion](#2-data-ingestion)
+- [3. Allocation](#3-allocation)
+- [4. Reporting and Analytics](#4-reporting-and-analytics)
+- [5. Anomaly Management](#5-anomaly-management)
+- [6. Forecasting](#6-forecasting)
+- [7. Unit Economics](#7-unit-economics)
+- [8. Workload Optimization](#8-workload-optimization)
+- [9. Licensing and SaaS](#9-licensing-and-saas)
+- [10. Rate Optimization --- Requires RI purchase](#10-rate-optimization-----requires-ri-purchase)
+- [11. Invoicing and Chargeback](#11-invoicing-and-chargeback)
 
 ## 1. Welcome and Introduction
 - Overview of Workshop Objectives
 - Importance of Cost Optimization in Cloud Environments
 - Brief Introduction to Azure Cost Management Tools
 
-
-
-
-
-##  2. Analyzing Monthly Costs of Existing Applications
-
-Azure tags provide a powerful way to organize and manage resources. By tagging resources with relevant information, such as the environment, application name, owner, and project, we can filter cost management data to analyze the expenses related to specific parts of our infrastructure. This exercise aims to demonstrate how to use these tags to calculate and analyze the monthly cost of a specified application.
-
-Northwind's pizza has two applications: the PizzaOrderPortal, which hosts Northwind's main website, and DoughDynasty, which manages the recipe database and ingredient supply chain. The PizzaOrderPortal is a production resource managed by the PizzaOpsTeam, ensuring seamless customer orders and deliveries. DoughDynasty, on the other hand, is still in development, managed by the DoughDevelopers team, focusing on perfecting the art of pizza dough and ingredient optimization.
-
-**Exercise:**
-In the cost management portal, identify the monthly cost of both applications, PizzaOrderPortal and DoughDynasty, and also calculate the total cost of the GourmetRollout project. By breaking down these costs, you will gain insights into which areas consume the most resources and can make informed decisions to optimize expenditure.
-
-Note: If there isn't enough data to see the monthly cost, take the daily cost and multiply it by 30 to estimate the monthly expense.
-
-
-
-## 3. Identifying Idle Resources
-
-As Northwind's pizza business flourished, its cloud infrastructure expanded faster than dough in the summer sun to meet growing customer demands and ensure seamless operations.However, amongst this rapid growth, the PizzaOpsTeam overlooked regular maintenance and cleanup of the environment. This oversight allowed unused resources to accumulate, leading to unnecessary costs and operational inefficiencies.
-
-Picture a storeroom filled with outdated ingredients and unused kitchen gadgets—items that were once vital but now gather dust. Similarly, Northwind's cloud environment became cluttered with idle virtual machines, unattached disks, and forgotten public IP addresses. This oversight started to weigh on the company's operational costs, diverting funds away from potential new features and innovations.
-
-Note: Do note delete these resources now as they will be used in the next exercise.
-
-**Exercise:**
-Azure Advisor offers a Cost Optimization workbook specifically designed to identify unused resources. Your task is to use this workbook to review Northwind's cloud environment and identify production resources that are idle. 
-
-- **Objective**: Utilizing the Azure Cost Optimization Workbook
-- **Practical Exercise**: Identify idle resources such as Disks, Application Gateways, Public IP Addresses, and Private Endpoints
-- **Tools**: Azure Advisor Cost Optimization Workbook
-
-
-
-## 4. Automating 
-
-Imagine the bustling kitchen of Northwind's, where every ingredient and tool serves a purpose in crafting the perfect pizza. Just like in a busy kitchen, efficiency in Northwind's cloud environment is crucial for maintaining operational excellence. Without automated oversight, resources such as idle virtual machines and unused storage could accumulate unnoticed, draining valuable resources and impacting operational budgets.
-
-To address this challenge, the PizzaOpsTeam decided to deploy an automated solution using Azure Logic Apps. This solution integrates with Azure Advisor's Cost Optimization recommendations to periodically detect and alert about idle resources.
-
-**Exercise:**
-Your task is to deploy and configure an Azure Logic App that integrates with the Cost Optimization workbook in Azure Advisor. This app will automate the detection of idle resources in Northwind's cloud environment, providing timely alerts to the PizzaOpsTeam. Set up the logic app to run weekly to detect idle resources effectively.
-
-Note: To validate that the automation is functioning correctly, manually trigger the logic app once after deployment. This step ensures that alerts are generated and received by the PizzaOpsTeam as expected.
-
-
-### Autome Idle Resource Detection
-- **Objective**: Deployment of a Logic App to Receive Alerts for New Idle Resources
-- **Practical Exercise**: Create and test the alerting mechanism
-
-
-
-## 5. Enabling Azure Hybrid Benefit for Windows VMs
-
-Imagine having a limited supply of premium ingredients in the kitchen. You would use these ingredients where they make the most impact on the menu, enhancing the dishes that are most popular or have the highest profit margins. Similarly, in this exercise, you will need to identify and prioritize the VMs that will benefit most from the Azure Hybrid Benefit.
-
-One powerful cost-saving feature offered by Azure is the Azure Hybrid Benefit, which allows organizations to use their existing on-premises Windows Server licenses with Software Assurance to save up to 85% on Azure virtual machines.
-
-However, Northwind's doesn't have enough licenses to enable Azure Hybrid Benefit across all VMs. This means the PizzaOpsTeam must strategically prioritize which VMs to apply this benefit to, ensuring the biggest return on investment.
-
-**Exercise**
-Your task is to apply the Azure Hybrid benefit for Windows VMs. However, keep in mind it needs to be prioritize to the VM(s) that will have hthe buggest return of invemestment. 
-- **Objective**: Prioritizing and Enabling Hybrid Benefit
-- **Practical Exercise**: Apply Azure Hybrid Benefit to selected VMs
-
-<details>
-  <summary>Click to view a hint about Azure Hybrid Benefit</summary>
-  <div class="code-block">
-    <pre><code> Vou can use the [Azure pricing calculator](https://azure.microsoft.com/en-us/pricing/calculator/) to simulate and prioritize the Hybrid benefit to different VM sizes.
-    Also, the [Azure Hybrid Benefit Calculator](https://azure.microsoft.com/en-gb/pricing/hybrid-benefit/#overview) can be used to know how many cores you are entitled to use on the cloud.
-</code></pre>
-  </div>
-</details>
-
-## 6. Cleaning Up Idle Resources
-
-
-In previous exercises you have use the Advisor workbook to identify some unused resrouces. These unused resources not only add unnecessary costs but also complicate the management of the environment.
-Exercise:
-
-    Objective: Implement best practices for resource cleanup to optimize Northwind's cloud environment.
-    Hands-On Activity:
-        Use the Azure Advisor's Cost Optimization workbook to review the list of idle resources you identified in previous exercises.
-        Safely delete or deallocate these idle resources to reduce costs and streamline the environment.
-
-Tip: Some queries in the Azure Advisor workbook come with built-in functions to delete idle disks directly. Utilize these functions where applicable to streamline the cleanup process and ensure no unused resources are overlooked.
-
-Note: Ensure that you double-check the resources before deleting them to avoid accidentally removing any critical resources.
-
-## 7. Auto shutdown of non-production VMs 
-
-Just as you wouldn't leave the ovens running overnight or the lights on in an empty pizzeria, it's equally important to manage cloud resources efficiently. Non-production virtual machines (VMs), like the experimental DoughDynasty environment, can consume valuable resources when left running outside of business hours.
-
-Northwind's development team, the DoughDevelopers, often works on creating new recipes and refining the pizza ordering system in a non-production environment. These VMs, crucial for testing and development, do not need to be running 24/7. By implementing an auto-shutdown policy, Northwind's can save on operational costs and ensure resources are available when needed most.
+## 2. Data Ingestion
+Optimizing log analytics involves ensuring that only the necessary data is ingested into your Azure Log Analytics workspace. Sending more logs than needed can significantly increase costs without providing additional value. By carefully selecting which logs to send, and optimizing the retention and query settings, you can reduce costs and improve performance.
 
 Exercise:
+Optimize the logs sent to the Log Analytics workspace by configuring data collection rules and retention policies. Focus on sending only the most relevant logs and optimizing query performance.
 
-Objective: Configure an auto-shutdown policy to automatically power off non-production VMs outside of business hours, optimizing resource usage and reducing costs.
+    Objective: Minimize costs by reducing unnecessary log ingestion.
+    Practical Exercise: Configure data collection rules and retention policies in Azure Log Analytics.
 
-Steps:
+## 3. Allocation
+Cost allocation involves distributing cloud costs to the appropriate business units, projects, or departments based on defined rules and tags. Custom cost allocation rules can help ensure that each team is accountable for its cloud usage and spending.
 
-Review Non-Production VMs:
-    Identify all non-production VMs in Northwind's cloud environment, particularly those used by the DoughDevelopers team for testing and development.
+Exercise:
+Configure custom cost allocation rules based on tags to ensure accurate cost distribution among Northwind's Pizza's different projects and departments.
 
-Configure Auto-Shutdown Policy:
-    Set up an [auto-shutdown logic app](https://learn.microsoft.com/en-us/azure/azure-functions/start-stop-vms/overview) for these non-production VMs to power them off automatically outside of business hours (e.g., from 7 PM to 7 AM, and during weekends).
+    Objective: Implement custom cost allocation rules for accurate cost tracking.
+    Practical Exercise: Set up tag-based cost allocation in Azure Cost Management.
 
+## 4. Reporting and Analytics
+Deploying FinOps Hubs enables centralized financial operations management, providing visibility into cloud spending, budget adherence, and cost optimization opportunities. These hubs facilitate better decision-making and accountability across the organization.
 
-## 7. Reviewing and Optimizing Resource SKUs
+Exercise:
+Deploy FinOps Hubs to centralize financial operations management and enhance visibility into cloud spending and optimization opportunities.
 
-- **Objective**: Finding Cheaper and Newer SKUs for Virtual Machines and Web Applications
+    Objective: Enhance financial operations management and reporting.
+    Practical Exercise: Set up and configure FinOps Hubs in Azure.
 
-Just as Northwind's is always searching for better deals on ingredients to keep their pizzas affordable, optimizing cloud costs involves finding more efficient and cost-effective resources. Cloud services are constantly evolving, and newer, cheaper SKUs often become available, offering opportunities to reduce costs without sacrificing performance.
+## 5. Anomaly Management
 
-In Northwind's cloud environment, several virtual machines and web applications are essential for their operations. Some of these resources, like one particularly large virtual machine, have been using the same SKU for a while. Similarly, the web application plan currently in use might not be the most cost-effective option available today.
+Cost anomalies can indicate unexpected spending patterns that need investigation. Configuring cost anomaly detection **at scale** helps to automatically identify and alert on unusual spending, allowing for timely intervention and cost control.
 
-Note: For the purposes of this exercise, assume that the applications can run on different SKUs without issues.
+Exercise:
+Configure cost anomaly detection at scale to automatically identify and alert on unusual spending patterns in Northwind's Pizza's cloud environment.
 
+    Objective: Detect and manage cost anomalies effectively.
+    Practical Exercise: Set up cost anomaly detection in Azure Cost Management.
 
-<details>
-  <summary>Click to view a hint about VM processors</summary>
-  <div class="code-block">
-    <pre><code> Virtual Machines: Some of the larger VMs might be using older SKUs. Evaluating different processor architectures, such as AMD or ARM, could lead to significant cost savings.
-    Web Applications: The web application plan currently in use may not be the most optimal. Explore newer plans for potential savings.
-    Learn more about other CPU architectures: https://learn.microsoft.com/en-us/azure/virtual-machines/dpsv5-dpdsv5-series
-    Full list of Processors:     // ARM Processors
-    vmSize has "Epsv5" or vmSize has "Epdsv5" or vmSize has "Dpsv5" or vmSize has "Dpdsv", "ARM",
-    // AMD VM Types
-    vmSize has "Standard_D2a" or vmSize has "Standard_D4a" or vmSize has "Standard_D8a" or vmSize has "Standard_D16a" or vmSize has "Standard_D32a" or vmSize has "Standard_D48a" or vmSize has "Standard_D64a" or vmSize has "Standard_D96a" or vmSize has "Standard_D2as" or vmSize has "Standard_D4as" or vmSize has "Standard_D8as" or vmSize has "Standard_D16as" or vmSize has "Standard_D32as" or vmSize has "Standard_D48as" or vmSize has "Standard_D64as" or vmSize has "Standard_D96as", "AMD",
-    "Intel"
-</code></pre>
-  </div>
-</details>
+## 6. Forecasting
 
-<details>
-  <summary>Click to view a hint for the Web Application</summary>
-  <div class="code-block">
-    <pre><code> Comparing Web Application SKUs: v2 vs. v3: https://azure.microsoft.com/en-us/pricing/details/app-service/windows-previous/
-</code></pre>
-  </div>
-</details>
+Accurately forecasting cloud costs helps in budgeting and financial planning. After optimizing the infrastructure, forecasting the cost of the application can provide insights into future spending and help in setting realistic budgets.
 
-## 8. Backup optimization
+Exercise:
+Forecast the cost of Northwind's Pizza's applications after implementing optimizations, using historical data and trend analysis.
 
-Just as Northwind's pizza business wouldn't store every ingredient the same way—some items require refrigeration while others can be kept on the shelf—not every virtual machine in your cloud environment needs the same backup policy. Efficiently managing backup policies can lead to significant cost savings and optimized resource usage.
+    Objective: Provide accurate cost forecasts for budgeting and planning.
+    Practical Exercise: Use Azure Cost Management tools to forecast future costs.
 
-As Northwind's cloud infrastructure grew, a uniform backup policy was applied across all VMs. However, it's clear that non-production VMs don't require the same level of backup frequency and retention as critical production systems.
+## 7. Unit Economics
 
-***Exercise:**
-Your task is to review and optimize the backup policies for Northwind's VMs. Evaluate which VMs can have less frequent backups or shorter retention periods, focusing on the non-production ones to reduce unnecessary costs.
+Unit economics involves understanding the cost of cloud resources per unit of business output, such as the cost per pizza. This analysis helps in determining how cloud costs impact the overall profitability of the business.
 
-### Backup Strategy for Production and Non-Production Resources
-- **Objective**: Designing an Efficient Backup Strategy
-- **Practical Exercise**: Implement a backup plan for production and non-production resources
+Exercise:
+Calculate how much the current cloud cost impacts the cost of producing each pizza, helping Northwind's Pizza understand the financial implications of their cloud spending.
 
+    Objective: Analyze cloud cost impact on unit economics.
+    Practical Exercise: Calculate the per-unit cost of cloud resources.
 
+## 8. Workload Optimization
+Workload optimization ensures that resources are used efficiently. This includes identifying and cleaning up idle resources, optimizing backup strategies, and implementing auto-shutdown policies for non-production environments.
 
+Exercise:
+Identify and clean up idle resources, optimize backup strategies, and configure auto-shutdown policies to ensure efficient resource usage.
 
+    Objective: Optimize workloads for cost efficiency.
+    Practical Exercise: Perform resource cleanup, backup optimization, and configure auto-shutdown policies.
 
-## 9. Q&A and Wrap-Up
-- Open Floor for Questions and Discussions
-- Summary of Key Takeaways
-- Next Steps and Additional Resources
+## 9. Licensing and SaaS
+Enabling Azure Hybrid Benefit (AHB) allows organizations to use their existing on-premises Windows Server and SQL Server licenses with Software Assurance to save on Azure VMs. This can lead to significant cost savings.
 
+Exercise:
+Enable Azure Hybrid Benefit for applicable Windows VMs to take advantage of existing licenses and reduce costs.
 
+    Objective: Utilize existing licenses to save on Azure costs.
+    Practical Exercise: Apply Azure Hybrid Benefit to selected VMs.
 
-<!--
+## 10. Rate Optimization --- Requires RI purchase
 
-// other ideas:
+Purchasing Reserved Instances (RIs) and Spot Instances (SPs) can significantly reduce costs compared to pay-as-you-go rates. RIs provide a discount in exchange for a commitment to use a specific VM size for a set period, while SPs offer substantial savings for workloads that can tolerate interruptions.
 
-## 7. Log Analytics Cost Analysis
-- **Objective**: Understanding Log Analytics Costs Per VM
-- **Hands-On Activity**: Identify high-cost VMs and propose cost-saving measures
+Exercise:
+Purchase Reserved Instances and Spot Instances to optimize rates and reduce costs for Northwind's Pizza's cloud environment.
 
-[ ] Concluded
+    Objective: Achieve cost savings through rate optimization.
+    Practical Exercise: Evaluate and purchase Reserved Instances and Spot Instances.
 
-### Azure Storage Account Optimization
-- **Objective**: Performance Tuning and Data Lifecycle Management and Optimizing Storage Tiers
-- **Practical Exercise**: Optimize a storage account's performance and cost
+## 11. Invoicing and Chargeback
 
-[ ] Concluded
+Showback involves reporting the cost of cloud resources to the relevant teams, while chargeback involves billing those teams for their usage. This encourages accountability and helps in tracking cost avoidance based on optimizations.
 
+Exercise:
+Showback the cost of Reserved Instances and calculate the cost avoidance achieved by cleaning up idle resources. Implement a chargeback mechanism to bill teams for their cloud usage.
 
---->
+    Objective: Promote accountability through showback and chargeback.
+    Practical Exercise: Implement showback and chargeback for cloud resource costs.
