@@ -20,6 +20,7 @@ Learn how to optimize costs in cloud environments using Azure tools and best pra
 
 <img src="https://raw.githubusercontent.com/arthurclares/finops-toolkit/arclares-costoptlabs/docs/_automation/costlab/lab/pizzalogo.jpg" alt="Northwind's Pizza Logo" style="width: 100%; max-width: 1024px; height: auto;">
 
+
 # Cost Optimization Lab
 
 Imagine you're responsible for deploying and configuring the Azure infrastructure for Northwind's Pizza, a renowned pizza place known for its gourmet offerings. Northwind's Pizza is launching a new line of gourmet pizzas. You've been tasked with optimizing the cloud infrastructure to ensure it can support this expansion. The marketing team has informed you that several new pizza flavors will be introduced this year, and each will require additional online and operational support. Your challenge is to optimize the existing cloud infrastructure, allowing Northwind's Pizza to invest in new services and innovations.
@@ -38,17 +39,20 @@ By the end of this workshop, you'll be equipped to efficiently manage your Azure
 
 ## Table of Contents
 
-- [Table of Contents](#table-of-contents)
-- [1. Welcome and Introduction](#1-welcome-and-introduction)
-- [2. Analyzing Monthly Costs of Existing Applications](#2-analyzing-monthly-costs-of-existing-applications)
-- [3. Identifying Idle Resources](#3-identifying-idle-resources)
-- [4. Automating](#4-automating)
-- [5. Enabling Azure Hybrid Benefit for Windows VMs](#5-enabling-azure-hybrid-benefit-for-windows-vms)
-- [6. Cleaning Up Idle Resources](#6-cleaning-up-idle-resources)
-- [7. Auto shutdown of non-production VMs](#7-auto-shutdown-of-non-production-vms)
-- [7. Reviewing and Optimizing Resource SKUs](#7-reviewing-and-optimizing-resource-skus)
-- [8. Backup optimization](#8-backup-optimization)
-- [9. Q\&A and Wrap-Up](#9-qa-and-wrap-up)
+- [Cost Optimization Lab](#cost-optimization-lab)
+- [Workshop Agenda](#workshop-agenda)
+  - [Table of Contents](#table-of-contents)
+  - [1. Welcome and Introduction](#1-welcome-and-introduction)
+  - [2. Analyzing Monthly Costs of Existing Applications](#2-analyzing-monthly-costs-of-existing-applications)
+  - [3. Identifying Idle Resources](#3-identifying-idle-resources)
+  - [4. Automating](#4-automating)
+    - [Autome Idle Resource Detection](#autome-idle-resource-detection)
+  - [5. Enabling Azure Hybrid Benefit for Windows VMs](#5-enabling-azure-hybrid-benefit-for-windows-vms)
+  - [6. Reviewing and Optimizing Resource SKUs](#6-reviewing-and-optimizing-resource-skus)
+  - [7. Cleaning Up Idle Resources](#7-cleaning-up-idle-resources)
+  - [8. Backup optimization](#8-backup-optimization)
+    - [Backup Strategy for Production and Non-Production Resources](#backup-strategy-for-production-and-non-production-resources)
+  - [9. Q\&A and Wrap-Up](#9-qa-and-wrap-up)
 
 
 ## 1. Welcome and Introduction
@@ -56,7 +60,7 @@ By the end of this workshop, you'll be equipped to efficiently manage your Azure
 - Importance of Cost Optimization in Cloud Environments
 - Brief Introduction to Azure Cost Management Tools
 
-
+[ ] Concluded
 
 
 
@@ -88,7 +92,7 @@ Azure Advisor offers a Cost Optimization workbook specifically designed to ident
 - **Practical Exercise**: Identify idle resources such as Disks, Application Gateways, Public IP Addresses, and Private Endpoints
 - **Tools**: Azure Advisor Cost Optimization Workbook
 
-
+[ ] Concluded
 
 ## 4. Automating 
 
@@ -106,7 +110,7 @@ Note: To validate that the automation is functioning correctly, manually trigger
 - **Objective**: Deployment of a Logic App to Receive Alerts for New Idle Resources
 - **Practical Exercise**: Create and test the alerting mechanism
 
-
+[ ] Concluded
 
 ## 5. Enabling Azure Hybrid Benefit for Windows VMs
 
@@ -121,50 +125,9 @@ Your task is to apply the Azure Hybrid benefit for Windows VMs. However, keep in
 - **Objective**: Prioritizing and Enabling Hybrid Benefit
 - **Practical Exercise**: Apply Azure Hybrid Benefit to selected VMs
 
-<details>
-  <summary>Click to view a hint about Azure Hybrid Benefit</summary>
-  <div class="code-block">
-    <pre><code> Vou can use the [Azure pricing calculator](https://azure.microsoft.com/en-us/pricing/calculator/) to simulate and prioritize the Hybrid benefit to different VM sizes.
-    Also, the [Azure Hybrid Benefit Calculator](https://azure.microsoft.com/en-gb/pricing/hybrid-benefit/#overview) can be used to know how many cores you are entitled to use on the cloud.
-</code></pre>
-  </div>
-</details>
+[ ] Concluded
 
-## 6. Cleaning Up Idle Resources
-
-
-In previous exercises you have use the Advisor workbook to identify some unused resrouces. These unused resources not only add unnecessary costs but also complicate the management of the environment.
-Exercise:
-
-    Objective: Implement best practices for resource cleanup to optimize Northwind's cloud environment.
-    Hands-On Activity:
-        Use the Azure Advisor's Cost Optimization workbook to review the list of idle resources you identified in previous exercises.
-        Safely delete or deallocate these idle resources to reduce costs and streamline the environment.
-
-Tip: Some queries in the Azure Advisor workbook come with built-in functions to delete idle disks directly. Utilize these functions where applicable to streamline the cleanup process and ensure no unused resources are overlooked.
-
-Note: Ensure that you double-check the resources before deleting them to avoid accidentally removing any critical resources.
-
-## 7. Auto shutdown of non-production VMs 
-
-Just as you wouldn't leave the ovens running overnight or the lights on in an empty pizzeria, it's equally important to manage cloud resources efficiently. Non-production virtual machines (VMs), like the experimental DoughDynasty environment, can consume valuable resources when left running outside of business hours.
-
-Northwind's development team, the DoughDevelopers, often works on creating new recipes and refining the pizza ordering system in a non-production environment. These VMs, crucial for testing and development, do not need to be running 24/7. By implementing an auto-shutdown policy, Northwind's can save on operational costs and ensure resources are available when needed most.
-
-Exercise:
-
-Objective: Configure an auto-shutdown policy to automatically power off non-production VMs outside of business hours, optimizing resource usage and reducing costs.
-
-Steps:
-
-Review Non-Production VMs:
-    Identify all non-production VMs in Northwind's cloud environment, particularly those used by the DoughDevelopers team for testing and development.
-
-Configure Auto-Shutdown Policy:
-    Set up an [auto-shutdown logic app](https://learn.microsoft.com/en-us/azure/azure-functions/start-stop-vms/overview) for these non-production VMs to power them off automatically outside of business hours (e.g., from 7 PM to 7 AM, and during weekends).
-
-
-## 7. Reviewing and Optimizing Resource SKUs
+## 6. Reviewing and Optimizing Resource SKUs
 
 - **Objective**: Finding Cheaper and Newer SKUs for Virtual Machines and Web Applications
 
@@ -198,6 +161,23 @@ Note: For the purposes of this exercise, assume that the applications can run on
   </div>
 </details>
 
+
+## 7. Cleaning Up Idle Resources
+
+
+In previous exercises you have use the Advisor workbook to identify some unused resrouces. These unused resources not only add unnecessary costs but also complicate the management of the environment.
+Exercise:
+
+    Objective: Implement best practices for resource cleanup to optimize Northwind's cloud environment.
+    Hands-On Activity:
+        Use the Azure Advisor's Cost Optimization workbook to review the list of idle resources you identified in previous exercises.
+        Safely delete or deallocate these idle resources to reduce costs and streamline the environment.
+
+Tip: Some queries in the Azure Advisor workbook come with built-in functions to delete idle disks directly. Utilize these functions where applicable to streamline the cleanup process and ensure no unused resources are overlooked.
+
+Note: Ensure that you double-check the resources before deleting them to avoid accidentally removing any critical resources.
+
+
 ## 8. Backup optimization
 
 Just as Northwind's pizza business wouldn't store every ingredient the same way—some items require refrigeration while others can be kept on the shelf—not every virtual machine in your cloud environment needs the same backup policy. Efficiently managing backup policies can lead to significant cost savings and optimized resource usage.
@@ -211,15 +191,17 @@ Your task is to review and optimize the backup policies for Northwind's VMs. Eva
 - **Objective**: Designing an Efficient Backup Strategy
 - **Practical Exercise**: Implement a backup plan for production and non-production resources
 
+[ ] Concluded
 
-
-
+> ⚠️ **Attention!**  
+> Before concluding the workshop, be sure to delete your Resource Group. This step is essential to avoid any unintended costs after the session.
 
 ## 9. Q&A and Wrap-Up
 - Open Floor for Questions and Discussions
 - Summary of Key Takeaways
 - Next Steps and Additional Resources
 
+[ ] Concluded
 
 
 <!--
