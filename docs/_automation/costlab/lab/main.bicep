@@ -6,7 +6,7 @@ targetScope = 'subscription'
 param labName string = 'NorthwindPizza'
 @description('Azure location where all resources should be created. Default: italynorth')
 param resourceGroupLocation string = 'italynorth'
-param numberOfRGs int = 6
+param numberOfRGs int = 1
 
 @description('Optional. Tags to apply to all resources.')
 param tags object = {}
