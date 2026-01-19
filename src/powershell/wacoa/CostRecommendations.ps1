@@ -640,7 +640,9 @@ function ConvertTo-FlatString {
 
 function Format-RecommendationDetails {
     param (
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
+        [AllowNull()]
+        [AllowEmptyString()]
         $Details
     )
     
