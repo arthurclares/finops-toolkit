@@ -148,8 +148,8 @@ function Process-KQLFiles {
     Write-Log -Message "Found $($kqlFiles.Count) KQL recommendation files to process." -Level "INFO"
     Write-Host "`nFound $($kqlFiles.Count) KQL recommendation files to process." -ForegroundColor Cyan
 
-    $allResources = @()
-    $queryErrors = @()
+    $allResources = [System.Collections.Generic.List[object]]::new()
+    $queryErrors = [System.Collections.Generic.List[object]]::new()
 
     $kqlFilterStringForParallel = ""
 
@@ -167,7 +167,7 @@ function Process-KQLFiles {
                 $scopeConditions += "(SubAccountId == '$($scope.SubscriptionId)')"
             }
             elseif ($scope.Type -eq "ResourceGroup") {
-                $scopeConditions += "(SubAccountId == '$($scope.SubscriptionId)' and x_ResourceGroupName == '$($scope.ResourceGroupName)')"
+                $scopeConditions += "(SubAccountId == '$($scope.SubscriptionId)' and x_ResourceGroupName =~ '$($scope.ResourceGroupName)')"
             }
         }
         
@@ -193,7 +193,32 @@ function Process-KQLFiles {
             )
             $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
             $logMessage = "$timestamp [$Level] [Thread $([System.Threading.Thread]::CurrentThread.ManagedThreadId)] $Message"
-            Add-Content -Path $PathToLogFile -Value $logMessage -ErrorAction SilentlyContinue
+            
+            # Use mutex for thread-safe logging
+            $mutexName = "Global\CostRecommendationsLog"
+            $mutex = $null
+            try {
+                $mutex = [System.Threading.Mutex]::new($false, $mutexName)
+                $acquired = $mutex.WaitOne(5000)
+                if ($acquired) {
+                    Add-Content -Path $PathToLogFile -Value $logMessage -ErrorAction SilentlyContinue
+                }
+            }
+            catch {
+                # If mutex fails, fall back to regular logging
+                Add-Content -Path $PathToLogFile -Value $logMessage -ErrorAction SilentlyContinue
+            }
+            finally {
+                if ($null -ne $mutex) {
+                    try {
+                        $mutex.ReleaseMutex()
+                        $mutex.Dispose()
+                    }
+                    catch {
+                        # Ignore mutex release errors
+                    }
+                }
+            }
         }
 
         try {
@@ -234,10 +259,17 @@ function Process-KQLFiles {
 
     foreach ($item in $results) {
         if ($item -is [PSCustomObject] -and $item.PSObject.Properties['IsError']) {
-            $queryErrors += $item
+            $queryErrors.Add($item)
         }
         elseif ($item -ne $null) {
-            $allResources += @($item)
+            if ($item -is [Array]) {
+                foreach ($subItem in $item) {
+                    $allResources.Add($subItem)
+                }
+            }
+            else {
+                $allResources.Add($item)
+            }
         }
     }
 
@@ -252,8 +284,8 @@ function Process-KQLFiles {
     Write-Host "Found $($allResources.Count) KQL recommendations in the environment." -ForegroundColor Cyan
 
     return @{
-        AllResources = $allResources
-        QueryErrors  = $queryErrors
+        AllResources = [array]$allResources
+        QueryErrors  = [array]$queryErrors
     }
 }
 
@@ -338,7 +370,32 @@ function Manual-Validations {
                 )
                 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
                 $logMessage = "$timestamp [$Level] [Thread $([System.Threading.Thread]::CurrentThread.ManagedThreadId)] $Message"
-                Add-Content -Path $logFile -Value $logMessage -ErrorAction SilentlyContinue
+                
+                # Use mutex for thread-safe logging
+                $mutexName = "Global\CostRecommendationsLog"
+                $mutex = $null
+                try {
+                    $mutex = [System.Threading.Mutex]::new($false, $mutexName)
+                    $acquired = $mutex.WaitOne(5000)
+                    if ($acquired) {
+                        Add-Content -Path $logFile -Value $logMessage -ErrorAction SilentlyContinue
+                    }
+                }
+                catch {
+                    # If mutex fails, fall back to regular logging
+                    Add-Content -Path $logFile -Value $logMessage -ErrorAction SilentlyContinue
+                }
+                finally {
+                    if ($null -ne $mutex) {
+                        try {
+                            $mutex.ReleaseMutex()
+                            $mutex.Dispose()
+                        }
+                        catch {
+                            # Ignore mutex release errors
+                        }
+                    }
+                }
             }
 
             try {
@@ -379,7 +436,7 @@ function Manual-Validations {
                     $scopeConditions += "(subscriptionId == '$($scope.SubscriptionId)')"
                 }
                 elseif ($scope.Type -eq "ResourceGroup") {
-                    $scopeConditions += "(subscriptionId == '$($scope.SubscriptionId)' and resourceGroup == '$($scope.ResourceGroupName)')"
+                    $scopeConditions += "(subscriptionId == '$($scope.SubscriptionId)' and resourceGroup =~ '$($scope.ResourceGroupName)')"
                 }
             }
             
@@ -390,7 +447,7 @@ function Manual-Validations {
         elseif ($ScopeObject.SubscriptionIds -and $ScopeObject.ResourceGroupName) {
             $subscriptionList = $ScopeObject.SubscriptionIds -split ',' | ForEach-Object { "'$($_.Trim())'" }
             $subscriptionFilter = $subscriptionList -join ","
-            $query += " | where subscriptionId in ($subscriptionFilter) and resourceGroup == '$($ScopeObject.ResourceGroupName)'"
+            $query += " | where subscriptionId in ($subscriptionFilter) and resourceGroup =~ '$($ScopeObject.ResourceGroupName)'"
         }
         elseif ($ScopeObject.SubscriptionIds) {
             $subscriptionList = $ScopeObject.SubscriptionIds -split ',' | ForEach-Object { "'$($_.Trim())'" }
@@ -422,7 +479,32 @@ function Manual-Validations {
                 )
                 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
                 $logMessage = "$timestamp [$Level] [Thread $([System.Threading.Thread]::CurrentThread.ManagedThreadId)] $Message"
-                Add-Content -Path $logFile -Value $logMessage -ErrorAction SilentlyContinue
+                
+                # Use mutex for thread-safe logging
+                $mutexName = "Global\CostRecommendationsLog"
+                $mutex = $null
+                try {
+                    $mutex = [System.Threading.Mutex]::new($false, $mutexName)
+                    $acquired = $mutex.WaitOne(5000)
+                    if ($acquired) {
+                        Add-Content -Path $logFile -Value $logMessage -ErrorAction SilentlyContinue
+                    }
+                }
+                catch {
+                    # If mutex fails, fall back to regular logging
+                    Add-Content -Path $logFile -Value $logMessage -ErrorAction SilentlyContinue
+                }
+                finally {
+                    if ($null -ne $mutex) {
+                        try {
+                            $mutex.ReleaseMutex()
+                            $mutex.Dispose()
+                        }
+                        catch {
+                            # Ignore mutex release errors
+                        }
+                    }
+                }
             }
 
             try {
@@ -486,6 +568,142 @@ function Manual-Validations {
     }
 }
 
+function ConvertTo-FlatString {
+    param (
+        [Parameter(Mandatory = $true)]
+        $InputObject,
+        [int]$MaxDepth = 3,
+        [int]$CurrentDepth = 0
+    )
+    
+    if ($CurrentDepth -ge $MaxDepth) {
+        return "[Max depth reached]"
+    }
+    
+    if ($null -eq $InputObject) {
+        return ""
+    }
+    
+    # If it's a string, check if it's JSON
+    if ($InputObject -is [string]) {
+        if ($InputObject.StartsWith('{') -or $InputObject.StartsWith('[')) {
+            try {
+                $parsed = $InputObject | ConvertFrom-Json -ErrorAction Stop
+                return ConvertTo-FlatString -InputObject $parsed -MaxDepth $MaxDepth -CurrentDepth ($CurrentDepth + 1)
+            }
+            catch {
+                return $InputObject
+            }
+        }
+        return $InputObject
+    }
+    
+    # Handle arrays
+    if ($InputObject -is [Array]) {
+        $items = $InputObject | ForEach-Object {
+            ConvertTo-FlatString -InputObject $_ -MaxDepth $MaxDepth -CurrentDepth ($CurrentDepth + 1)
+        }
+        return $items -join "; "
+    }
+    
+    # Handle PSCustomObject and hashtables
+    if ($InputObject -is [PSCustomObject] -or $InputObject -is [System.Collections.IDictionary]) {
+        $parts = @()
+        
+        if ($InputObject -is [PSCustomObject]) {
+            $properties = $InputObject.PSObject.Properties
+        }
+        else {
+            $properties = $InputObject.GetEnumerator() | ForEach-Object {
+                [PSCustomObject]@{ Name = $_.Key; Value = $_.Value }
+            }
+        }
+        
+        foreach ($prop in $properties) {
+            $name = $prop.Name
+            $value = if ($InputObject -is [PSCustomObject]) { $prop.Value } else { $prop.Value }
+            
+            if ($null -ne $value) {
+                $flatValue = ConvertTo-FlatString -InputObject $value -MaxDepth $MaxDepth -CurrentDepth ($CurrentDepth + 1)
+                if ($flatValue) {
+                    $parts += "$name`: $flatValue"
+                }
+            }
+        }
+        
+        return $parts -join "; "
+    }
+    
+    # For primitive types, return string representation
+    return $InputObject.ToString()
+}
+
+function Format-RecommendationDetails {
+    param (
+        [Parameter(Mandatory = $true)]
+        $Details
+    )
+    
+    if ($null -eq $Details -or $Details -eq "") {
+        return ""
+    }
+    
+    # Parse JSON if it's a string
+    $detailsObj = $Details
+    if ($Details -is [string] -and $Details.StartsWith('{')) {
+        try {
+            $detailsObj = $Details | ConvertFrom-Json -ErrorAction Stop
+        }
+        catch {
+            return $Details
+        }
+    }
+    
+    # If not an object, return as-is
+    if ($detailsObj -isnot [PSCustomObject] -and $detailsObj -isnot [System.Collections.IDictionary]) {
+        return $Details
+    }
+    
+    # Extract key fields for reservation recommendations
+    $parts = @()
+    
+    # Check for reservation recommendation properties
+    if ($detailsObj.reservedResourceType) {
+        $parts += "Type: $($detailsObj.reservedResourceType)"
+    }
+    
+    if ($detailsObj.displaySKU -or $detailsObj.sku) {
+        $sku = if ($detailsObj.displaySKU) { $detailsObj.displaySKU } else { $detailsObj.sku }
+        $parts += "SKU: $sku"
+    }
+    
+    if ($detailsObj.location) {
+        $parts += "Location: $($detailsObj.location)"
+    }
+    
+    if ($detailsObj.targetResourceCount -or $detailsObj.qty) {
+        $qty = if ($detailsObj.targetResourceCount) { $detailsObj.targetResourceCount } else { $detailsObj.qty }
+        $parts += "Quantity: $qty"
+    }
+    
+    if ($detailsObj.term) {
+        $parts += "Term: $($detailsObj.term)"
+    }
+    
+    if ($detailsObj.annualSavingsAmount) {
+        $currency = if ($detailsObj.savingsCurrency) { $detailsObj.savingsCurrency } else { "USD" }
+        $parts += "Annual Savings: $($detailsObj.annualSavingsAmount) $currency"
+    }
+    
+    # If we found reservation-specific fields, return formatted string
+    if ($parts.Count -gt 0) {
+        return $parts -join "; "
+    }
+    
+    # Otherwise, use generic flattening
+    return ConvertTo-FlatString -InputObject $detailsObj
+}
+
 function Export-ResultsToExcel {
     param (
         [array]$AllResources,
@@ -493,7 +711,7 @@ function Export-ResultsToExcel {
         [string]$ExcelFilePath
     )
 
-    # Map resources to ensure all expected fields are included
+    # Map resources to ensure all expected fields are included and transform JSON fields
     $mappedData = $AllResources | ForEach-Object {
         [PSCustomObject]@{
             ResourceId                 = $_.ResourceId
@@ -510,8 +728,8 @@ function Export-ResultsToExcel {
             x_RecommendationControl     = $_.x_RecommendationControl
             x_RecommendationMaturityLevel = $_.x_RecommendationMaturityLevel
             x_RecommendationDescription = $_.x_RecommendationDescription
-            x_RecommendationSolution    = $_.x_RecommendationSolution
-            x_RecommendationDetails     = $_.x_RecommendationDetails
+            x_RecommendationSolution    = if ($_.x_RecommendationSolution) { ConvertTo-FlatString -InputObject $_.x_RecommendationSolution } else { $_.x_RecommendationSolution }
+            x_RecommendationDetails     = if ($_.x_RecommendationDetails) { Format-RecommendationDetails -Details $_.x_RecommendationDetails } else { $_.x_RecommendationDetails }
             x_RecommendationDate        = $_.x_RecommendationDate
         }
     }
