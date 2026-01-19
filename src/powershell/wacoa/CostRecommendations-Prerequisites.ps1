@@ -1,5 +1,9 @@
 $IsRunningOnWindows = $PSVersionTable.Platform -eq 'Win32NT'
 
+# Platform detection variables
+$script:IsWindowsPlatform = ($PSVersionTable.Platform -eq 'Win32NT') -or (-not $PSVersionTable.Platform)
+$script:IsCloudShell = ($env:ACC_ENV -eq 'AzureCloudShell') -or ($env:CLOUD_SHELL -eq 'true')
+
 <#
 .SYNOPSIS
     Prerequisites and validation functions for the CostRecommendations script.
@@ -28,6 +32,75 @@ function Write-Log {
         "ERROR" { Write-Host $logMessage -ForegroundColor Red }
         "DEBUG" { Write-Host $logMessage -ForegroundColor Gray }
     }
+}
+
+function Write-ParallelLog {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$Message,
+        [Parameter(Mandatory = $false)]
+        [ValidateSet("INFO", "WARNING", "ERROR", "DEBUG")]
+        [string]$Level = "INFO",
+        [Parameter(Mandatory = $true)]
+        [string]$LogFilePath
+    )
+    
+    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $logMessage = "$timestamp [$Level] [Thread $([System.Threading.Thread]::CurrentThread.ManagedThreadId)] $Message"
+    
+    # Use mutex for thread-safe logging
+    $mutexName = "Global\CostRecommendationsLog"
+    $mutex = $null
+    try {
+        $mutex = [System.Threading.Mutex]::new($false, $mutexName)
+        $acquired = $mutex.WaitOne(5000)
+        if ($acquired) {
+            Add-Content -Path $LogFilePath -Value $logMessage -ErrorAction SilentlyContinue
+        }
+    }
+    catch {
+        # If mutex fails, fall back to regular logging
+        Add-Content -Path $LogFilePath -Value $logMessage -ErrorAction SilentlyContinue
+    }
+    finally {
+        if ($null -ne $mutex) {
+            try {
+                $mutex.ReleaseMutex()
+                $mutex.Dispose()
+            }
+            catch {
+                # Ignore mutex release errors
+            }
+        }
+    }
+}
+
+function Get-SafeTempPath {
+    <#
+    .SYNOPSIS
+        Returns appropriate temporary path based on environment.
+    .DESCRIPTION
+        Returns temp path that works across Windows, Linux, and Cloud Shell environments.
+    #>
+    
+    if ($script:IsCloudShell) {
+        $currentPath = Get-Location
+        $tempPath = Join-Path -Path $currentPath -ChildPath "temp\WACOA"
+        if (-not (Test-Path -Path $tempPath)) {
+            New-Item -ItemType Directory -Path $tempPath -Force | Out-Null
+        }
+        return $tempPath
+    }
+    
+    if ($env:TEMP) {
+        return $env:TEMP
+    }
+    
+    if ($env:HOME) {
+        return $env:HOME
+    }
+    
+    return $PSScriptRoot
 }
 
 function Check-ScriptVersion {
@@ -168,9 +241,7 @@ function Download-GitHubFolder {
         New-Item -Path $Destination -ItemType Directory -ErrorAction Stop | Out-Null
     }
 
-    $tempPath = $env:TEMP
-    if (-not $tempPath) { $tempPath = $env:HOME } # Fallback for Linux/Cloud Shell where $env:TEMP is null
-    if (-not $tempPath) { $tempPath = $PSScriptRoot }
+    $tempPath = Get-SafeTempPath
     $zipFilePath = Join-Path $tempPath "azure-resources.zip"
 
     Write-Log -Message "Downloading zip file from: $repoUrl to $zipFilePath" -Level "INFO"
@@ -285,7 +356,7 @@ function Get-Scope {
         }
         '2' {
             $jsonPath = $null
-            if ($IsRunningOnWindows -and (-not (($env:ACC_ENV -eq 'AzureCloudShell') -or ($env:CLOUD_SHELL -eq 'true')))) {
+            if ($script:IsWindowsPlatform -and (-not $script:IsCloudShell)) {
                 try {
                     Add-Type -AssemblyName System.Windows.Forms -ErrorAction Stop
                     $openFileDialog = New-Object System.Windows.Forms.OpenFileDialog
@@ -311,7 +382,9 @@ function Get-Scope {
             }
             else {
                 Write-Host "Please provide the path to the scope JSON file." -ForegroundColor Cyan
-                Write-Host "Tip: Upload the file to your Cloud Shell home directory first." -ForegroundColor Yellow
+                if ($script:IsCloudShell) {
+                    Write-Host "Tip: Upload the file to your Cloud Shell home directory first." -ForegroundColor Yellow
+                }
                 $jsonPath = Read-Host "Enter file path (e.g., /home/user/scope.json or ~/scope.json)"
                 if (-not (Test-Path -LiteralPath $jsonPath)) {
                     Write-Log -Message "File not found at path: $jsonPath" -Level "ERROR"
@@ -405,7 +478,7 @@ function Get-Scope {
 }
 
 function Get-FilePath {
-    if (($env:ACC_ENV -eq 'AzureCloudShell') -or ($env:CLOUD_SHELL -eq 'true')) {
+    if ($script:IsCloudShell) {
         Write-Host "Please provide the path to the Well-Architected assessment CSV file." -ForegroundColor Cyan
         Write-Host "Tip: Upload the file to your Cloud Shell home directory first." -ForegroundColor Yellow
         $filePath = Read-Host "Enter file path (e.g., /home/user/assessment.csv or ~/assessment.csv)"
@@ -417,41 +490,40 @@ function Get-FilePath {
             return $null
         }
     }
-   elseif ($IsRunningOnWindows) {
-    try {
-        Add-Type -AssemblyName System.Windows.Forms -ErrorAction Stop
-        $fileBrowser = New-Object System.Windows.Forms.OpenFileDialog
-        $fileBrowser.InitialDirectory = [Environment]::GetFolderPath('Desktop')
-        $fileBrowser.Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*"
-        $fileBrowser.Title = "Select the Well-Architected Cost Optimization Assessment File"
+    elseif ($script:IsWindowsPlatform) {
+        try {
+            Add-Type -AssemblyName System.Windows.Forms -ErrorAction Stop
+            $fileBrowser = New-Object System.Windows.Forms.OpenFileDialog
+            $fileBrowser.InitialDirectory = [Environment]::GetFolderPath('Desktop')
+            $fileBrowser.Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*"
+            $fileBrowser.Title = "Select the Well-Architected Cost Optimization Assessment File"
 
-        if ($fileBrowser.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
-            return $fileBrowser.FileName
+            if ($fileBrowser.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+                return $fileBrowser.FileName
+            }
+            else {
+                return $null
+            }
         }
-        else {
-            return $null
+        catch {
+            Write-Warning "System.Windows.Forms is not available. Please enter the path manually."
+            $filePath = Read-Host "Enter full path to the CSV file"
+            if (-not (Test-Path -LiteralPath $filePath)) {
+                Write-Host "File not found at path: $filePath" -ForegroundColor Red
+                return $null
+            }
+            return $filePath
         }
     }
-    catch {
-        Write-Warning "System.Windows.Forms is not available. Please enter the path manually."
-        $filePath = Read-Host "Enter full path to the CSV file"
-        if (-not (Test-Path -LiteralPath $filePath)) {
+    else {
+        Write-Host "Please provide the path to the Well-Architected assessment CSV file." -ForegroundColor Cyan
+        $filePath = Read-Host "Enter file path (e.g., /home/user/assessment.csv)"
+        if (Test-Path -LiteralPath $filePath) {
+            return $filePath
+        }
+        else {
             Write-Host "File not found at path: $filePath" -ForegroundColor Red
             return $null
         }
-        return $filePath
     }
-}
-else {
-    Write-Host "Please provide the path to the Well-Architected assessment CSV file." -ForegroundColor Cyan
-    Write-Host "Tip: Upload the file to your Cloud Shell home directory first." -ForegroundColor Yellow
-    $filePath = Read-Host "Enter file path (e.g., /home/user/assessment.csv or ~/assessment.csv)"
-    if (Test-Path -LiteralPath $filePath) {
-        return $filePath
-    }
-    else {
-        Write-Host "File not found at path: $filePath" -ForegroundColor Red
-        return $null
-    }
-}
 }

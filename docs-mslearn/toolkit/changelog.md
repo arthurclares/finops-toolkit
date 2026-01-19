@@ -102,6 +102,27 @@ _Released January 2026_
 - **Added**
   - Added `-Format` and `-CompressionMode` parameters to [New-FinOpsCostExport](powershell/cost/New-FinOpsCostExport.md) to support Parquet format and gzip/snappy compression ([#1074](https://github.com/microsoft/finops-toolkit/issues/1074)).
 
+### Azure Cost Optimization Recommendations scripts v13
+
+- **Added**
+  - Added `ConvertTo-FlatString` function to recursively convert nested objects and JSON strings into human-readable format.
+  - Added `Format-RecommendationDetails` function to parse reservation recommendation JSON and extract key fields (Type, SKU, Location, Quantity, Term, Annual Savings).
+  - Added `Write-ParallelLog` function with mutex-based thread-safe logging for parallel execution.
+  - Added `Get-SafeTempPath` function to return appropriate temporary path based on environment (Windows, Linux, Cloud Shell).
+  - Added platform detection variables (`$script:IsWindowsPlatform`, `$script:IsCloudShell`) to Prerequisites script.
+  - Added comprehensive validation script `Test-CostRecommendations.ps1` with test categories for prerequisites, modules, functions, data transformation, Azure connectivity, and integration testing.
+- **Changed**
+  - Updated `Export-ResultsToExcel` function to apply data transformation to `x_RecommendationDetails` and `x_RecommendationSolution` fields before export, converting raw JSON to human-readable format.
+  - Improved `Get-FilePath` function with better handling for Cloud Shell and non-Windows platforms with fallback to manual input.
+  - Updated `Process-KQLFiles` function to use generic collections (`[System.Collections.Generic.List[object]]`) instead of array concatenation for O(1) amortized performance.
+  - Updated KQL filters to use case-insensitive comparison (`=~`) for resource group names.
+  - Updated all three `Write-ParallelLog` function instances to use mutex for thread-safe logging in parallel execution scenarios.
+  - Updated `Download-GitHubFolder` function to use `Get-SafeTempPath` for cross-platform compatibility.
+  - Updated `Get-Scope` function to use platform detection variables for better cross-platform support.
+- **Fixed**
+  - Fixed raw JSON appearing in `x_RecommendationDetails` column in Excel output by parsing and formatting reservation recommendation data into human-readable format (e.g., "Type: virtualmachines; SKU: Standard_D2a_v4; Location: eastus2; Quantity: 6; Term: P1Y; Annual Savings: 1591 USD").
+  - Fixed potential race conditions in parallel log writing by implementing mutex-based synchronization.
+
 > [!div class="nextstepaction"] > [Download](https://github.com/microsoft/finops-toolkit/releases/tag/v13) > [!div class="nextstepaction"] > [Full changelog](https://github.com/microsoft/finops-toolkit/compare/v12...v13)
 
 <br>
